@@ -1,4 +1,8 @@
-Bare minimum example of making a distributable package (i.e. not shared from local files.)
+# Ziggy
 
-Example library, based on https://github.com/MasterQ32/any-pointer/  
-Where any-pointer is used in https://github.com/MasterQ32/LoLa/.  
+A personally biased utility library.  
+This is intended for personal use, but you're free to use it (preferably fork it).  
+Don't expect a stable api, support nor continuity.  
+
+Issues and merge requests are welcome.  
+For motives other than it not being the idiomatic way to use zig.

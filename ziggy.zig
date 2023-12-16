@@ -1,9 +1,7 @@
-const std = @import("std");
+pub const cmp = @import("modules/ziggy.cmp.zig");
+pub const fmt = @import("modules/ziggy.fmt.zig");
+pub const fs = @import("modules/ziggy.fs.zig");
 
-pub fn getNumber() i32 {
-    return 42;
-}
-
-test "getNumber should return 42" {
-    try std.testing.expectEqual(42, getNumber());
+test {
+    @import("std").testing.refAllDecls(@This());
 }

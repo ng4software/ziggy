@@ -1,18 +1,30 @@
 const std = @import("std");
 
-pub fn build(b: *std.Build) void {
-    const target = b.standardTargetOptions(.{});
-    const optimize = b.standardOptimizeOption(.{});
+pub fn build(b: *std.build.Builder) void {
 
-    const lib = b.addStaticLibrary(.{
-        .name = "libziggy",
-        .target = target,
-        .optimize = optimize,
-    });
+    // CreateModuleOptions from std:
+    // pub const CreateModuleOptions = struct {
+    //     source_file: LazyPath,
+    //     dependencies: []const ModuleDependency = &.{},
+    // };
 
-     b.installArtifact(lib);
+    //LazyPath from std:
+    // pub const LazyPath = union(enum) {
+    //      path: []co`nst u8,
+    //      generated: *const GeneratedFile,
+    //      cwd_relative: []const u8,
+    //      dependency: struct {
+    //          dependency: *Dependency,
+    //          sub_path: []const u8,
+    //      },
+    // }
+    const ziggy_module_options = .{
+        .source_file = .{ .path = "ziggy.zig" }
+    };
 
-     _ = b.addModule("ziggy", .{
-        .source_file = .{ .path = "lib/ziggy.zig" }
-     });
+    // addModule from std:
+    // pub fn addModule(b: *Build, name: []const u8, options: CreateModuleOptions) *Module 
+    _ = b.addModule("ziggy", ziggy_module_options);
+
+    //TODO: Add test steps.
 }

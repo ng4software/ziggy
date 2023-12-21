@@ -1,13 +1,14 @@
+//! This module provides utility functions for system file paths.
+//! Note that this module is currently focused around Windows operating system.
+
 const std = @import("std");
 const z = @import("../../ziggy.zig");
 
-// Get relative path from the working directory.
-// Rational:
-//   a) "realPathAlloc" really doesn't tell what the intent is.
-//   b) Also a desire to be relative to an arbitraty directory other than cwd (hence cwd_prefix for now).
-//   c) Formattable, the last any type can be left empty.
-pub inline fn from_cwd(allocator: std.mem.Allocator, comptime pattern: []const u8, args: anytype) ![]u8 {
-    const path = try z.str.format(allocator, pattern, args);
+///
+/// Returns the absolute path from your current working directory to a given directory.
+///
+pub inline fn from_cwd(allocator: std.mem.Allocator, comptime directory_pattern: []const u8, args: anytype) ![]u8 {
+    const path = try z.str.format(allocator, directory_pattern, args);
     defer allocator.free(path);
 
     return std.fs.cwd().realpathAlloc(allocator, path);

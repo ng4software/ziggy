@@ -1,3 +1,5 @@
+//! Root file of Ziggy, here is where we reference our wonderful modules.
+
 //File system operations.
 pub const fs = @import("modules/fs/ziggy.fs.zig");
 

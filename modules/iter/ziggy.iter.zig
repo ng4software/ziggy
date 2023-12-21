@@ -1,3 +1,5 @@
+//! This module provides utility functions to iterate over data, such as buffers.
+
 const std = @import("std");
 const builtin = @import("builtin");
 const z = @import("../../ziggy.zig");
@@ -6,7 +8,9 @@ const ReaderType = std.fs.File.Reader;
 const BufReaderType = std.io.BufferedReader(4096, ReaderType);
 const BufReaderReaderType = BufReaderType.Reader;
 
-/// A generic iterator to read a buffer line by line given a delimiter or until it reaces EOF.
+///
+/// A generic iterator that will read the underlying buffer to some delimiter or end of file.
+///
 pub const ReadUntilDelimiterIterator = struct {
     allocator: std.mem.Allocator,
     delimiter: u8,
@@ -84,10 +88,10 @@ test "ReadUntilDelimiterIterator should iterate a large text input line by line"
     try std.testing.expect(199403 == count);
 }
 
-// Open a file and get the (buffered) reader from it.
-// Rational:
-//   a) Opening a file and getting a reader seems like a very common operation.
-//   b) I'm personally of the opinion a reader also belongs in std.fs and not std.io.
+///
+/// Create a new iterator that will read the buffer line by line, delimited by a line ending \n (CR)
+/// TODO: Currently does not support CR or LF delimited buffers.
+///
 pub inline fn line_iterator(allocator: std.mem.Allocator, filePath: []const u8) !ReadUntilDelimiterIterator {
     const file = try std.fs.openFileAbsolute(filePath, .{});
 

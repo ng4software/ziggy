@@ -1,3 +1,5 @@
+//! Submodule to format/manipulate string.
+
 const std = @import("std");
 const z = @import("../../ziggy.zig");
 
@@ -7,6 +9,11 @@ const z = @import("../../ziggy.zig");
 //   b) I personally prefer going with allocator passing instead of out buffers.
 // TODO: Can we do comptime checking if the args in respect to a pattern is valid?
 //       Currently zig std gives an ugly error that's hard to grasp what is wrong.
+
+///
+/// Format to a string given a pattern and the variables to subsitute.
+/// TODO: Can we validate if a pattern is valid? So we don't throw ugly errors.
+///
 pub inline fn format(allocator: std.mem.Allocator, comptime pattern: []const u8, args: anytype) std.fmt.AllocPrintError![]u8 {
     return try std.fmt.allocPrint(allocator, pattern, args);
 }
@@ -27,7 +34,9 @@ test "str.format() formats a pattern with a integer '{d}' placeholder." {
     try std.testing.expect(z.str.equals(result, "Hello 42"));
 }
 
-// Remove all occurences from a string (u8 slice).
+///
+/// Removes all occurences of the character (or sequence of characters) in a string.
+///
 pub inline fn remove(allocator: std.mem.Allocator, haystack: []const u8, needle: []const u8) ![]const u8 {
     const outputSize = std.mem.replacementSize(u8, haystack, needle, "");
     const output = try allocator.alloc(u8, outputSize);

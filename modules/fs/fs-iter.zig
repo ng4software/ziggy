@@ -47,7 +47,7 @@ pub const ReadUntilDelimiterIterator = struct {
     }
 };
 
-test "should iterate iterator.txt line by line" {
+test "ReadUntilDelimiterIterator should iterate iterator.txt line by line" {
     const allocator = std.testing.allocator;
 
     const iteratorPath = try path.from_cwd(allocator, "./test_data/iterator.txt", .{});
@@ -66,7 +66,7 @@ test "should iterate iterator.txt line by line" {
     }
 }
 
-test "should iterate a large text input line by line" {
+test "ReadUntilDelimiterIterator should iterate a large text input line by line" {
     const allocator = std.testing.allocator;
 
     const iteratorPath = try path.from_cwd(allocator, "./test_data/dutch-words.txt", .{});
@@ -89,9 +89,26 @@ test "should iterate a large text input line by line" {
 // Rational:
 //   a) Opening a file and getting a reader seems like a very common operation.
 //   b) I'm personally of the opinion a reader also belongs in std.fs and not std.io.
-pub inline fn line_iterator(allocator: std.mem.Allocator, filePath: []const u8) ReadUntilDelimiterIterator {
+pub inline fn line_iterator(allocator: std.mem.Allocator, filePath: []const u8) !ReadUntilDelimiterIterator {
     const file = try std.fs.openFileAbsolute(filePath, .{});
 
     //TODO: "\n" is not bulletproof for all platforms.
     return ReadUntilDelimiterIterator.init(allocator, file, '\n');
+}
+
+test "fs.line_iterator() should open file and create a line-by-line iterator" {
+    const allocator = std.testing.allocator;
+
+    const iteratorPath = try path.from_cwd(allocator, "./test_data/dutch-words.txt", .{});
+    defer allocator.free(iteratorPath);
+
+    var iterator = try line_iterator(allocator, iteratorPath);
+    var count: i32 = 0;
+
+    while (try iterator.next()) |line| {
+        try std.testing.expect(str.has_text(line));
+        count += 1;
+    }
+
+    try std.testing.expect(199403 == count);
 }

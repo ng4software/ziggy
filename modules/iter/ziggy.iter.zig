@@ -1,7 +1,6 @@
 const std = @import("std");
 const builtin = @import("builtin");
-const path = @import("./fs-path.zig");
-const str = @import("../ziggy.str.zig");
+const z = @import("../../ziggy.zig");
 
 const ReaderType = std.fs.File.Reader;
 const BufReaderType = std.io.BufferedReader(4096, ReaderType);
@@ -50,7 +49,7 @@ pub const ReadUntilDelimiterIterator = struct {
 test "ReadUntilDelimiterIterator should iterate iterator.txt line by line" {
     const allocator = std.testing.allocator;
 
-    const iteratorPath = try path.from_cwd(allocator, "./test_data/iterator.txt", .{});
+    const iteratorPath = try z.path.from_cwd(allocator, "./test_data/iterator.txt", .{});
     defer allocator.free(iteratorPath);
 
     const file = try std.fs.openFileAbsolute(iteratorPath, .{});
@@ -61,7 +60,7 @@ test "ReadUntilDelimiterIterator should iterate iterator.txt line by line" {
 
     while (try iterator.next()) |line| {
         const test_data_slice = test_data[test_data_count];
-        try std.testing.expect(str.equals(test_data_slice, line));
+        try std.testing.expect(z.str.equals(test_data_slice, line));
         test_data_count += 1;
     }
 }
@@ -69,7 +68,7 @@ test "ReadUntilDelimiterIterator should iterate iterator.txt line by line" {
 test "ReadUntilDelimiterIterator should iterate a large text input line by line" {
     const allocator = std.testing.allocator;
 
-    const iteratorPath = try path.from_cwd(allocator, "./test_data/dutch-words.txt", .{});
+    const iteratorPath = try z.path.from_cwd(allocator, "./test_data/dutch-words.txt", .{});
     defer allocator.free(iteratorPath);
 
     const file = try std.fs.openFileAbsolute(iteratorPath, .{});
@@ -78,7 +77,7 @@ test "ReadUntilDelimiterIterator should iterate a large text input line by line"
     var count: i32 = 0;
 
     while (try iterator.next()) |line| {
-        try std.testing.expect(str.has_text(line));
+        try std.testing.expect(z.str.has_text(line));
         count += 1;
     }
 
@@ -99,14 +98,14 @@ pub inline fn line_iterator(allocator: std.mem.Allocator, filePath: []const u8) 
 test "fs.line_iterator() should open file and create a line-by-line iterator" {
     const allocator = std.testing.allocator;
 
-    const iteratorPath = try path.from_cwd(allocator, "./test_data/dutch-words.txt", .{});
+    const iteratorPath = try z.path.from_cwd(allocator, "./test_data/dutch-words.txt", .{});
     defer allocator.free(iteratorPath);
 
     var iterator = try line_iterator(allocator, iteratorPath);
     var count: i32 = 0;
 
     while (try iterator.next()) |line| {
-        try std.testing.expect(str.has_text(line));
+        try std.testing.expect(z.str.has_text(line));
         count += 1;
     }
 

@@ -1,10 +1,18 @@
-//Import all our wonderful modules.
-pub const fs = @import("modules/ziggy.fs.zig");
-pub const str = @import("modules/ziggy.str.zig");
+//File system operations.
+pub const fs = @import("modules/fs/ziggy.fs.zig");
 
-//Find all the tests inside other packages.
-//TODO: Can we use 'refAllDeclsRecursive' instead? so all the submodules don't need to do this to run their tests.
-//NOTE: A module/file needs to have atleast one public decl for the tests to run!
+//String manipulation.
+pub const str = @import("modules/str/ziggy.str.zig");
+
+//Buffer iteration tools.
+pub const iter = @import("modules/iter/ziggy.iter.zig");
+
+//File path utility.
+pub const path = @import("modules/path/ziggy.path.zig");
+
 test {
-    @import("std").testing.refAllDecls(@This());
+    _ = fs;
+    _ = str;
+    _ = iter;
+    _ = path;
 }

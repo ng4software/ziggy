@@ -1,5 +1,5 @@
 const std = @import("std");
-const cmp = @import("str-cmp.zig");
+const z = @import("../../ziggy.zig");
 
 // Format and create a string from a pattern and it's given arguments.
 // Rational:
@@ -16,7 +16,7 @@ test "str.format() formats a pattern with a string '{s}' placeholder." {
     const pattern = "Hello {s}";
     const args = .{"World"};
     const result = try format(allocator, pattern, args);
-    try std.testing.expect(cmp.equals(result, "Hello World"));
+    try std.testing.expect(z.str.equals(result, "Hello World"));
 }
 
 test "str.format() formats a pattern with a integer '{d}' placeholder." {
@@ -24,7 +24,7 @@ test "str.format() formats a pattern with a integer '{d}' placeholder." {
     const pattern = "Hello {d}";
     const args = .{42};
     const result = try format(allocator, pattern, args);
-    try std.testing.expect(cmp.equals(result, "Hello 42"));
+    try std.testing.expect(z.str.equals(result, "Hello 42"));
 }
 
 // Remove all occurences from a string (u8 slice).

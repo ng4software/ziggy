@@ -1,5 +1,5 @@
 const std = @import("std");
-const str = @import("../ziggy.str.zig");
+const z = @import("../../ziggy.zig");
 
 // Get relative path from the working directory.
 // Rational:
@@ -7,9 +7,9 @@ const str = @import("../ziggy.str.zig");
 //   b) Also a desire to be relative to an arbitraty directory other than cwd (hence cwd_prefix for now).
 //   c) Formattable, the last any type can be left empty.
 pub inline fn from_cwd(allocator: std.mem.Allocator, comptime pattern: []const u8, args: anytype) ![]u8 {
-    const path = try str.format(allocator, pattern, args);
+    const path = try z.str.format(allocator, pattern, args);
     defer allocator.free(path);
-    
+
     return std.fs.cwd().realpathAlloc(allocator, path);
 }
 
@@ -21,7 +21,7 @@ test "fs.from_cwd() gets cwd if empty sub directory is provided." {
     const format_from_cwd = try from_cwd(allocator, "", .{});
     defer allocator.free(format_from_cwd);
 
-    try std.testing.expect(str.equals(cwd, format_from_cwd));
+    try std.testing.expect(z.str.equals(cwd, format_from_cwd));
 }
 
 test "fs.from_cwd() should get cwd with specified sub directory" {
@@ -39,5 +39,5 @@ test "fs.from_cwd() should get cwd with specified sub directory" {
     const cwd_with_to_path = try from_cwd(allocator, to_path, .{});
     defer allocator.free(cwd_with_to_path);
 
-    try std.testing.expect(str.equals(from_cwd_to_path, cwd_with_to_path));
+    try std.testing.expect(z.str.equals(from_cwd_to_path, cwd_with_to_path));
 }

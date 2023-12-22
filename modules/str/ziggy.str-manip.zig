@@ -110,3 +110,27 @@ test "str.last() returns empty optional if string is empty" {
         try std.testing.expect(true);
     }
 }
+
+///
+/// Filters the character of a string given a function.
+///
+pub inline fn filter(allocator: std.mem.Allocator, string: []const u8, filterFn: *const fn (u8) bool) ![]const u8 {
+    var result = std.ArrayList(u8).init(allocator);
+    defer result.deinit();
+
+    for (string) |char| {
+        if (filterFn(char)) {
+            try result.append(char);
+        }
+    }
+
+    return result.toOwnedSlice();
+}
+
+test "str.filter() filters according filter predicate" {
+    const alloc = std.testing.allocator;
+    const onlyDigits: []const u8 = try filter(alloc, "one2three4five6", &std.ascii.isDigit);
+    defer alloc.free(onlyDigits);
+
+    try std.testing.expectEqualSlices(u8, "246", onlyDigits);
+}

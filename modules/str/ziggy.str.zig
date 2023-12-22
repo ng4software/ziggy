@@ -11,6 +11,8 @@ pub const has_text = cmp.has_text;
 const manip = @import("ziggy.str-manip.zig");
 pub const format = manip.format;
 pub const remove = manip.remove;
+pub const first = manip.first;
+pub const last = manip.last;
 
 //Find all the tests inside other packages.
 test {

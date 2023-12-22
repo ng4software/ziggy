@@ -7,13 +7,13 @@ const cmp = @import("ziggy.str-cmp.zig");
 pub const equals = cmp.equals;
 pub const has_text = cmp.has_text;
 
-//Formatting of string.
-const fmt = @import("ziggy.str-fmt.zig");
-pub const format = fmt.format;
-pub const remove = fmt.remove;
+//Manipulating strings.
+const manip = @import("ziggy.str-manip.zig");
+pub const format = manip.format;
+pub const remove = manip.remove;
 
 //Find all the tests inside other packages.
 test {
     _ = cmp;
-    _ = fmt;
+    _ = manip;
 }

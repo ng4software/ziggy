@@ -3,13 +3,6 @@
 const std = @import("std");
 const z = @import("../../ziggy.zig");
 
-// Format and create a string from a pattern and it's given arguments.
-// Rational:
-//   a) It does not reflect the intent, we're not 'printing', we're formatting a pattern with variables and returning it.
-//   b) I personally prefer going with allocator passing instead of out buffers.
-// TODO: Can we do comptime checking if the args in respect to a pattern is valid?
-//       Currently zig std gives an ugly error that's hard to grasp what is wrong.
-
 ///
 /// Format to a string given a pattern and the variables to subsitute.
 /// TODO: Can we validate if a pattern is valid? So we don't throw ugly errors.
@@ -62,4 +55,58 @@ test "str.remove() should remove line endings" {
     defer allocator.free(new_string);
 
     try std.testing.expectEqualSlices(u8, "hello world!", new_string);
+}
+
+///
+/// Returns the first character of a string.
+///
+pub inline fn first(string: []const u8) ?u8 {
+    if (string.len == 0) {
+        return null;
+    }
+
+    return string[0];
+}
+
+test "str.first() should return first character of string" {
+    try std.testing.expect(first("Hello World") == 'H');
+}
+
+test "str.first() should return first character if string is one character long" {
+    try std.testing.expect(first("1") == '1');
+}
+
+test "str.first() returns empty optional if string is empty" {
+    if (first("")) |_| {
+        try std.testing.expect(false);
+    } else {
+        try std.testing.expect(true);
+    }
+}
+
+///
+/// Returns the first character of a string.
+///
+pub inline fn last(string: []const u8) ?u8 {
+    if (string.len == 0) {
+        return null;
+    }
+
+    return string[string.len - 1];
+}
+
+test "str.last() should return first character of string" {
+    try std.testing.expect(last("Hello World!") == '!');
+}
+
+test "str.last() should return first character if string is one character long" {
+    try std.testing.expect(last("1") == '1');
+}
+
+test "str.last() returns empty optional if string is empty" {
+    if (last("")) |_| {
+        try std.testing.expect(false);
+    } else {
+        try std.testing.expect(true);
+    }
 }
